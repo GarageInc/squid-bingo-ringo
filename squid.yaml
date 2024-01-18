@@ -7,10 +7,6 @@ description: |- # set description
 build:
 
 deploy:
-  addons:
-    postgres:
-    rpc:
-      - https://rpc.testnet.ms
 
   processor:
     cmd: ['node', 'lib/processor']
