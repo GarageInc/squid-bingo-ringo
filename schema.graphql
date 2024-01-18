@@ -1,0 +1,49 @@
+type User @entity {
+  id: ID!
+  address: String!
+  sectorsBought: [SectorsBought!] @derivedFrom(field: "owner")
+}
+
+type SectorsBought @entity {
+  id: ID!
+  version: BigInt!
+  
+  ownerAddress: String! @index
+  owner: User!
+
+  round: BigInt!
+  sectodIds: [String]!
+  spin: Int!
+
+  timestamp: DateTime! @index
+  transactionHash: String!
+}
+
+type GameCreated @entity {
+  id: ID!
+  game: String! @index
+  name: String! @index
+  sectorsAmount: BigInt!
+  everyNSectorIsAWinner: BigInt!
+  prizes: [String]!
+  sectorPrice: BigInt!
+
+  timestamp: DateTime! @index
+  transactionHash: String!
+}
+
+type GameFinished @entity {
+  id: ID!
+  round: BigInt!
+
+  timestamp: DateTime! @index
+  transactionHash: String!
+}
+
+type Initialized @entity {
+  id: ID!
+  version: BigInt!
+
+  timestamp: DateTime! @index
+  transactionHash: String!
+}
