@@ -52,8 +52,6 @@ export async function saveCreated(
   for (const transferData of transfersData) {
     const { e, event, block } = transferData
 
-    console.log('event', event)
-    console.log('transferData', transferData)
     const transfer = new GameCreated({
       id: makeId(event),
       game: e.game,
