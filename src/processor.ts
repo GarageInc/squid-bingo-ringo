@@ -1,4 +1,3 @@
-import {} from './contract'
 import {
   saveBought,
   saveCreated,
@@ -13,12 +12,26 @@ import {
   GameFinishedT
 } from './events'
 import { LogEvent } from './abi/generated/abi.support'
+import { BlockData } from '@subsquid/evm-processor'
 
 
 const hasIn = (item: LogContext, topic: string) => item.topics.indexOf(topic) !== -1
 
-function handler<T>(block: IBlockHeader, ctx: LogContext, log: LogEvent<T>) {
-  return { e: log.decode(ctx), event: ctx, block: block }
+type IBlockData = BlockData<{
+  log: {
+      topics: true;
+      data: true;
+  };
+  transaction: {
+      input: true;
+      hash: true;
+      from: true;
+  };
+}>
+
+function handler<T>(block: IBlockData, ctx: LogContext, log: LogEvent<T>) {
+  const decoded = log.decode(ctx)
+  return { e: decoded, event: ctx, block: block.header }
 }
 
 processor.run(database, async (ctx) => {
@@ -31,21 +44,22 @@ processor.run(database, async (ctx) => {
     for (const item of block.logs) {
         const logCtx: LogContext = {
           ...item,
+          ...block
         }
         if (hasIn(logCtx, GameCreatedT.topic)) {
-          gamesCreated.push(handler(block.header, logCtx, GameCreatedT))
+          gamesCreated.push(handler(block, logCtx, GameCreatedT))
         }
 
         if (hasIn(logCtx, SectorsBoughtT.topic)) {
-          sectorsBought.push(handler(block.header, logCtx, SectorsBoughtT))
+          sectorsBought.push(handler(block, logCtx, SectorsBoughtT))
         }
 
         if (hasIn(logCtx, InitializedT.topic)) {
-          initialized.push(handler(block.header, logCtx, InitializedT))
+          initialized.push(handler(block, logCtx, InitializedT))
         }
 
         if (hasIn(logCtx, GameFinishedT.topic)) {
-          gamesFinished.push(handler(block.header, logCtx, GameFinishedT))
+          gamesFinished.push(handler(block, logCtx, GameFinishedT))
         }
         
     }

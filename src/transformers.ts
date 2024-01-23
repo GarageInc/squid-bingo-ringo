@@ -5,7 +5,7 @@ import { GameCreated, GameFinished, Initialized, SectorsBought, User } from './m
 
 
 function getHash(event: LogContext): string | undefined {
-  return event.transaction?.hash || event.block.hash
+  return event.transactions[event.transactionIndex]?.hash || event.block.hash
 }
 
 const makeId = (event: LogContext) =>
@@ -52,6 +52,8 @@ export async function saveCreated(
   for (const transferData of transfersData) {
     const { e, event, block } = transferData
 
+    console.log('event', event)
+    console.log('transferData', transferData)
     const transfer = new GameCreated({
       id: makeId(event),
       game: e.game,

@@ -18,7 +18,7 @@ import {
   Transaction as _Transaction,
 } from '@subsquid/evm-processor'
 
-const FROM = 1397725
+const FROM = 1416612
 
 export const database = new TypeormDatabase()
 
@@ -56,6 +56,9 @@ export interface LogContext {
   id: string;
   logIndex: number;
   transactionIndex: number;
+  transactions: {
+    hash: string
+  }[]
   address: string;
   data: string;
   topics: string[];
