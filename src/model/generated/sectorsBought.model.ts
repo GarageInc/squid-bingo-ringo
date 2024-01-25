@@ -11,9 +11,6 @@ export class SectorsBought {
     @PrimaryColumn_()
     id!: string
 
-    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-    version!: bigint
-
     @Index_()
     @Column_("text", {nullable: false})
     ownerAddress!: string
@@ -30,6 +27,10 @@ export class SectorsBought {
 
     @Column_("int4", {nullable: false})
     spin!: number
+
+    @Index_()
+    @Column_("text", {nullable: false})
+    game!: string
 
     @Index_()
     @Column_("timestamp with time zone", {nullable: false})

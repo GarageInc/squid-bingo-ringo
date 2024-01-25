@@ -6,7 +6,6 @@ type User @entity {
 
 type SectorsBought @entity {
   id: ID!
-  version: BigInt!
   
   ownerAddress: String! @index
   owner: User!
@@ -14,6 +13,8 @@ type SectorsBought @entity {
   round: BigInt!
   sectodIds: [String]!
   spin: Int!
+
+  game: String! @index
 
   timestamp: DateTime! @index
   transactionHash: String!
@@ -35,6 +36,8 @@ type GameCreated @entity {
 type GameFinished @entity {
   id: ID!
   round: BigInt!
+
+  game: String! @index
 
   timestamp: DateTime! @index
   transactionHash: String!

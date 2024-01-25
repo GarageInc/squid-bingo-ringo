@@ -8,6 +8,8 @@ function getHash(event: LogContext): string | undefined {
   return event.transactions[event.transactionIndex]?.hash || event.block.hash
 }
 
+const getContractAddress = (event: LogContext) => event.transactions[event.transactionIndex]?.to 
+
 const makeId = (event: LogContext) =>
   `${getHash(event)}-${event.transactionIndex}-${event.id}-${event.logIndex}`
 
@@ -30,6 +32,8 @@ export async function saveFinished(
 
       timestamp: new Date(block.timestamp),
       transactionHash: getHash(event),
+
+      game: getContractAddress(event),
     })
 
     transfers.add(transfer)
@@ -55,6 +59,7 @@ export async function saveCreated(
     const transfer = new GameCreated({
       id: makeId(event),
       game: e.game,
+
       name: e.name,
       sectorsAmount: e.sectorsAmount,
       everyNSectorIsAWinner: e.everyNSectorIsAWinner,
@@ -94,6 +99,8 @@ export async function saveBought(
       owner: user,
       spin: e.spin,
 
+      game: getContractAddress(event),
+
       timestamp: new Date(block.timestamp),
       transactionHash: getHash(event),
     })
@@ -132,8 +139,11 @@ export async function saveInitialized(
 }
 
 async function getUser(address: string, ctx: Context) {
+  const targetAddress = address.toLowerCase()
+
   const user = await ctx.store.findOneBy(User, {
-    address: address,
+    address: targetAddress,
+    id: targetAddress
   })
 
   if (user) {
@@ -141,7 +151,8 @@ async function getUser(address: string, ctx: Context) {
   }
 
   const newUser = new User({
-    address,
+    address: targetAddress,
+    id: targetAddress
   })
 
   await ctx.store.save([newUser])

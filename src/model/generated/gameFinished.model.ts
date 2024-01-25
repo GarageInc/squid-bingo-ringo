@@ -14,6 +14,10 @@ export class GameFinished {
     round!: bigint
 
     @Index_()
+    @Column_("text", {nullable: false})
+    game!: string
+
+    @Index_()
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date
 

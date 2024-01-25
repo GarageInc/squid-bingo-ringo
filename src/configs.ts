@@ -1,6 +1,11 @@
 import { TypeormDatabase, Store } from '@subsquid/typeorm-store'
 import {
-  GAME,
+  GAME_1,
+  GAME_2,
+  GAME_3,
+  GAME_4,
+  GAME_5,
+  GAME_6,
   BINGO_RINGO,
 } from './contract'
 import {
@@ -37,10 +42,30 @@ export const processor = new EvmBatchProcessor()
       from: true,
     }
   })
-  .addLog({address: [GAME], topic0: [GameFinishedT.topic], transaction: true})
 
-  .addLog({address: [GAME], topic0: [InitializedT.topic], transaction: true})
-  .addLog({address: [GAME], topic0: [SectorsBoughtT.topic], transaction: true})
+  .addLog({address: [GAME_1], topic0: [GameFinishedT.topic], transaction: true})
+  .addLog({address: [GAME_1], topic0: [InitializedT.topic], transaction: true})
+  .addLog({address: [GAME_1], topic0: [SectorsBoughtT.topic], transaction: true})
+
+  .addLog({address: [GAME_2], topic0: [GameFinishedT.topic], transaction: true})
+  .addLog({address: [GAME_2], topic0: [InitializedT.topic], transaction: true})
+  .addLog({address: [GAME_2], topic0: [SectorsBoughtT.topic], transaction: true})
+
+  .addLog({address: [GAME_3], topic0: [GameFinishedT.topic], transaction: true})
+  .addLog({address: [GAME_3], topic0: [InitializedT.topic], transaction: true})
+  .addLog({address: [GAME_3], topic0: [SectorsBoughtT.topic], transaction: true})
+
+  .addLog({address: [GAME_4], topic0: [GameFinishedT.topic], transaction: true})
+  .addLog({address: [GAME_4], topic0: [InitializedT.topic], transaction: true})
+  .addLog({address: [GAME_4], topic0: [SectorsBoughtT.topic], transaction: true})
+
+  .addLog({address: [GAME_5], topic0: [GameFinishedT.topic], transaction: true})
+  .addLog({address: [GAME_5], topic0: [InitializedT.topic], transaction: true})
+  .addLog({address: [GAME_5], topic0: [SectorsBoughtT.topic], transaction: true})
+
+  .addLog({address: [GAME_6], topic0: [GameFinishedT.topic], transaction: true})
+  .addLog({address: [GAME_6], topic0: [InitializedT.topic], transaction: true})
+  .addLog({address: [GAME_6], topic0: [SectorsBoughtT.topic], transaction: true})
 
   .addLog({address: [BINGO_RINGO], topic0: [GameCreatedT.topic], transaction: true})
 
@@ -58,6 +83,7 @@ export interface LogContext {
   transactionIndex: number;
   transactions: {
     hash: string
+    to?: string
   }[]
   address: string;
   data: string;
