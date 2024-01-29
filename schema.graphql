@@ -2,6 +2,7 @@ type User @entity {
   id: ID!
   address: String!
   sectorsBought: [SectorsBought!] @derivedFrom(field: "owner")
+  participatedInGames: [ParticipantsInGames!] @derivedFrom(field: "user")
 }
 
 type SectorsBought @entity {
@@ -18,6 +19,17 @@ type SectorsBought @entity {
 
   timestamp: DateTime! @index
   transactionHash: String!
+}
+
+type ParticipantsInGames @entity {
+  id: ID!
+  
+  game: String! @index
+  round: BigInt! @index
+  
+  user: User!
+
+  timestamp: DateTime! @index
 }
 
 type GameCreated @entity {

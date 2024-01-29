@@ -1,7 +1,7 @@
 
 import { Context, IBlockHeader, LogContext } from './configs'
 import { GameCreatedT, GameFinishedT, InitializedT, SectorsBoughtT } from './events'
-import { GameCreated, GameFinished, Initialized, SectorsBought, User } from './model'
+import { GameCreated, GameFinished, Initialized, ParticipantsInGames, SectorsBought, User } from './model'
 
 
 function getHash(event: LogContext): string | undefined {
@@ -91,6 +91,10 @@ export async function saveBought(
 
     const user = await getUser(e.owner, ctx)
 
+    const game = getContractAddress(event)
+
+    await saveParticipantInGame(ctx, block, user, e.round, game)
+
     const transfer = new SectorsBought({
       id: makeId(event),
       round: e.round,
@@ -99,7 +103,7 @@ export async function saveBought(
       owner: user,
       spin: e.spin,
 
-      game: getContractAddress(event),
+      game: game,
 
       timestamp: new Date(block.timestamp),
       transactionHash: getHash(event),
@@ -110,6 +114,30 @@ export async function saveBought(
 
   await ctx.store.save([...transfers])
 }
+
+export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, user: User, round: bigint, game?: string) {
+  const targetAddress = user.address.toLowerCase()
+
+  const id = `${targetAddress}-${game}-${round}`
+
+  const participant = await ctx.store.findOneBy(ParticipantsInGames, {
+    id,
+  })
+
+  if (participant) {
+    return participant
+  }
+
+  const newParticipant = new ParticipantsInGames({
+    id: id,
+    game,
+    user,
+    round,
+    timestamp: new Date(block.timestamp)
+  })
+
+  return await ctx.store.save([newParticipant])
+} 
 
 export async function saveInitialized(
   ctx: Context,
