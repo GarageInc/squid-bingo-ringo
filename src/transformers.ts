@@ -99,7 +99,7 @@ export async function saveBought(
       id: makeId(event),
       round: e.round,
       sectodIds: e.sectodIds.map(i => i.toString()),
-      ownerAddress: e.owner,
+      ownerAddress: e.owner.toLowerCase(),
       owner: user,
       spin: e.spin,
 
