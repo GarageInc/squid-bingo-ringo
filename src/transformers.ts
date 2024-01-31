@@ -95,7 +95,7 @@ export async function saveBought(
 
     const sectors = e.sectodIds.map(i => i.toString())
 
-    await saveParticipantInGame(ctx, block, user, e.round, game, sectors)
+    await saveParticipantInGame(ctx, block, user, e.round, sectors, game)
 
     const transfer = new SectorsBought({
       id: makeId(event),
@@ -117,7 +117,7 @@ export async function saveBought(
   await ctx.store.save([...transfers])
 }
 
-export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, user: User, round: bigint, game?: string, sectors: string[]) {
+export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, user: User, round: bigint,  sectors: string[], game?: string) {
   const targetAddress = user.address.toLowerCase()
 
   const id = `${targetAddress}-${game}-${round}`
