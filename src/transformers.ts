@@ -93,12 +93,14 @@ export async function saveBought(
 
     const game = getContractAddress(event)
 
-    await saveParticipantInGame(ctx, block, user, e.round, game)
+    const sectors = e.sectodIds.map(i => i.toString())
+
+    await saveParticipantInGame(ctx, block, user, e.round, game, sectors)
 
     const transfer = new SectorsBought({
       id: makeId(event),
       round: e.round,
-      sectodIds: e.sectodIds.map(i => i.toString()),
+      sectodIds: sectors,
       ownerAddress: e.owner.toLowerCase(),
       owner: user,
       spin: e.spin,
@@ -115,7 +117,7 @@ export async function saveBought(
   await ctx.store.save([...transfers])
 }
 
-export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, user: User, round: bigint, game?: string) {
+export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, user: User, round: bigint, game?: string, sectors: string[]) {
   const targetAddress = user.address.toLowerCase()
 
   const id = `${targetAddress}-${game}-${round}`
@@ -125,6 +127,10 @@ export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, u
   })
 
   if (participant) {
+    participant.sectorIds = [...participant.sectorIds, ...sectors]
+
+    await ctx.store.save([participant])
+
     return participant
   }
 
@@ -133,6 +139,7 @@ export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, u
     game,
     user,
     round,
+    sectorIds: sectors,
     timestamp: new Date(block.timestamp)
   })
 

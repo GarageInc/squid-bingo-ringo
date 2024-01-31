@@ -19,6 +19,9 @@ export class ParticipantsInGames {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     round!: bigint
 
+    @Column_("text", {array: true, nullable: false})
+    sectorIds!: (string | undefined | null)[]
+
     @Index_()
     @ManyToOne_(() => User, {nullable: true})
     user!: User

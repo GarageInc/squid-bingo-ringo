@@ -26,6 +26,7 @@ type ParticipantsInGames @entity {
   
   game: String! @index
   round: BigInt! @index
+  sectorIds: [String]!
   
   user: User!
 

@@ -1,5 +1,5 @@
-module.exports = class Data1706511508716 {
-    name = 'Data1706511508716'
+module.exports = class Data1706698348034 {
+    name = 'Data1706698348034'
 
     async up(db) {
         await db.query(`CREATE TABLE "sectors_bought" ("id" character varying NOT NULL, "owner_address" text NOT NULL, "round" numeric NOT NULL, "sectod_ids" text array NOT NULL, "spin" integer NOT NULL, "game" text NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "transaction_hash" text NOT NULL, "owner_id" character varying, CONSTRAINT "PK_0347d910e30668638dac60566ef" PRIMARY KEY ("id"))`)
@@ -7,7 +7,7 @@ module.exports = class Data1706511508716 {
         await db.query(`CREATE INDEX "IDX_e26b833434a88a25f0a248f823" ON "sectors_bought" ("owner_id") `)
         await db.query(`CREATE INDEX "IDX_16955aa570b094db79d42bb55e" ON "sectors_bought" ("game") `)
         await db.query(`CREATE INDEX "IDX_4735c628e8d7cb78dbc2ba0833" ON "sectors_bought" ("timestamp") `)
-        await db.query(`CREATE TABLE "participants_in_games" ("id" character varying NOT NULL, "game" text NOT NULL, "round" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "user_id" character varying, CONSTRAINT "PK_b12e76c1e80ec10317e1b337748" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "participants_in_games" ("id" character varying NOT NULL, "game" text NOT NULL, "round" numeric NOT NULL, "sector_ids" text array NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "user_id" character varying, CONSTRAINT "PK_b12e76c1e80ec10317e1b337748" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_89bcd08f188a82f3b3981adef6" ON "participants_in_games" ("game") `)
         await db.query(`CREATE INDEX "IDX_61523535038168a297f3092330" ON "participants_in_games" ("round") `)
         await db.query(`CREATE INDEX "IDX_a909afd5d0d7d16c27aa21ce22" ON "participants_in_games" ("user_id") `)
