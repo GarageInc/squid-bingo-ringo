@@ -8,7 +8,7 @@ function getHash(event: LogContext): string | undefined {
   return event.transactions[event.transactionIndex]?.hash || event.block.hash
 }
 
-const getContractAddress = (event: LogContext) => event.transactions[event.transactionIndex]?.to 
+const getContractAddress = (event: LogContext) => event.transactions[event.transactionIndex]?.to?.toLowerCase()
 
 const makeId = (event: LogContext) =>
   `${getHash(event)}-${event.transactionIndex}-${event.id}-${event.logIndex}`
@@ -58,7 +58,7 @@ export async function saveCreated(
 
     const transfer = new GameCreated({
       id: makeId(event),
-      game: e.game,
+      game: e.game.toLowerCase(),
 
       name: e.name,
       sectorsAmount: e.sectorsAmount,
