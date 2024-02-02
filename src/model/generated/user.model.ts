@@ -1,6 +1,7 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_} from "typeorm"
 import {SectorsBought} from "./sectorsBought.model"
 import {ParticipantsInGames} from "./participantsInGames.model"
+import {StakedByUsers} from "./stakedByUsers.model"
 
 @Entity_()
 export class User {
@@ -19,4 +20,7 @@ export class User {
 
     @OneToMany_(() => ParticipantsInGames, e => e.user)
     participatedInGames!: ParticipantsInGames[]
+
+    @OneToMany_(() => StakedByUsers, e => e.user)
+    stakedByUser!: StakedByUsers[]
 }

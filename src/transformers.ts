@@ -1,7 +1,7 @@
 
 import { Context, IBlockHeader, LogContext } from './configs'
 import { GameCreatedT, GameFinishedT, InitializedT, SectorsBoughtT } from './events'
-import { GameCreated, GameFinished, Initialized, ParticipantsInGames, SectorsBought, User } from './model'
+import { GameCreated, GameFinished, Initialized, ParticipantsInGames, SectorsBought, StakedByUsers, User } from './model'
 
 
 function getHash(event: LogContext): string | undefined {
@@ -91,11 +91,13 @@ export async function saveBought(
 
     const user = await getUser(e.owner, ctx)
 
-    const game = getContractAddress(event)
+    const gameAddress = getContractAddress(event)
 
     const sectors = e.sectodIds.map(i => i.toString())
 
-    await saveParticipantInGame(ctx, block, user, e.round, sectors, game)
+    await saveParticipantInGame(ctx, block, user, e.round, sectors, gameAddress)
+    await saveStakedByUsers(ctx, block, user, sectors, gameAddress)
+
 
     const transfer = new SectorsBought({
       id: makeId(event),
@@ -105,7 +107,7 @@ export async function saveBought(
       owner: user,
       spin: e.spin,
 
-      game: game,
+      game: gameAddress,
 
       timestamp: new Date(block.timestamp),
       transactionHash: getHash(event),
@@ -144,6 +146,42 @@ export async function saveParticipantInGame(ctx: Context, block: IBlockHeader, u
   })
 
   return await ctx.store.save([newParticipant])
+} 
+
+
+export async function saveStakedByUsers(ctx: Context, block: IBlockHeader, user: User, sectors: string[], game?: string) {
+  const targetAddress = user.address.toLowerCase()
+
+  const id = `${targetAddress}-${game}`
+
+  const prevStakedInfo = await ctx.store.findOneBy(StakedByUsers, {
+    id,
+  })
+
+  const gameEntity = await ctx.store.findOneBy(GameCreated, {
+    game,
+  })
+
+  const amount = BigInt(sectors.length) * (gameEntity ? gameEntity.sectorPrice : BigInt(0))
+
+  if (prevStakedInfo) {
+    prevStakedInfo.amount = prevStakedInfo.amount + amount
+
+    await ctx.store.save([prevStakedInfo])
+
+    return prevStakedInfo
+  }
+
+  const stakedInfo = new StakedByUsers({
+    id: id,
+    game,
+    user,
+    amount,
+    userAddress: targetAddress,
+    timestamp: new Date(block.timestamp)
+  })
+
+  return await ctx.store.save([stakedInfo])
 } 
 
 export async function saveInitialized(

@@ -1,5 +1,5 @@
-module.exports = class Data1706698348034 {
-    name = 'Data1706698348034'
+module.exports = class Data1706863060194 {
+    name = 'Data1706863060194'
 
     async up(db) {
         await db.query(`CREATE TABLE "sectors_bought" ("id" character varying NOT NULL, "owner_address" text NOT NULL, "round" numeric NOT NULL, "sectod_ids" text array NOT NULL, "spin" integer NOT NULL, "game" text NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "transaction_hash" text NOT NULL, "owner_id" character varying, CONSTRAINT "PK_0347d910e30668638dac60566ef" PRIMARY KEY ("id"))`)
@@ -12,6 +12,11 @@ module.exports = class Data1706698348034 {
         await db.query(`CREATE INDEX "IDX_61523535038168a297f3092330" ON "participants_in_games" ("round") `)
         await db.query(`CREATE INDEX "IDX_a909afd5d0d7d16c27aa21ce22" ON "participants_in_games" ("user_id") `)
         await db.query(`CREATE INDEX "IDX_c49c50b30d08544825d192b6d2" ON "participants_in_games" ("timestamp") `)
+        await db.query(`CREATE TABLE "staked_by_users" ("id" character varying NOT NULL, "user_address" text NOT NULL, "game" text NOT NULL, "amount" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "transaction_hash" text NOT NULL, "user_id" character varying, CONSTRAINT "PK_ac47f1cdc23b49af942028773ae" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE INDEX "IDX_a4fcc0c9d2fa0eff9aa8635881" ON "staked_by_users" ("user_id") `)
+        await db.query(`CREATE INDEX "IDX_7d34f2aa5715461eba1ecdfec6" ON "staked_by_users" ("user_address") `)
+        await db.query(`CREATE INDEX "IDX_83e0fa1deefc04defe350ceebd" ON "staked_by_users" ("game") `)
+        await db.query(`CREATE INDEX "IDX_bfe8962de882fe1688b49852b6" ON "staked_by_users" ("timestamp") `)
         await db.query(`CREATE TABLE "user" ("id" character varying NOT NULL, "address" text NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`)
         await db.query(`CREATE TABLE "game_created" ("id" character varying NOT NULL, "game" text NOT NULL, "name" text NOT NULL, "sectors_amount" numeric NOT NULL, "every_n_sector_is_a_winner" numeric NOT NULL, "prizes" text array NOT NULL, "sector_price" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "transaction_hash" text NOT NULL, CONSTRAINT "PK_1cfe4397ab852dabfc75b665594" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_438ac2359d3f5f608e1d91c86e" ON "game_created" ("game") `)
@@ -24,6 +29,7 @@ module.exports = class Data1706698348034 {
         await db.query(`CREATE INDEX "IDX_ab514bcce24a9d9f47b1508438" ON "initialized" ("timestamp") `)
         await db.query(`ALTER TABLE "sectors_bought" ADD CONSTRAINT "FK_e26b833434a88a25f0a248f8238" FOREIGN KEY ("owner_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
         await db.query(`ALTER TABLE "participants_in_games" ADD CONSTRAINT "FK_a909afd5d0d7d16c27aa21ce224" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+        await db.query(`ALTER TABLE "staked_by_users" ADD CONSTRAINT "FK_a4fcc0c9d2fa0eff9aa86358818" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     }
 
     async down(db) {
@@ -37,6 +43,11 @@ module.exports = class Data1706698348034 {
         await db.query(`DROP INDEX "public"."IDX_61523535038168a297f3092330"`)
         await db.query(`DROP INDEX "public"."IDX_a909afd5d0d7d16c27aa21ce22"`)
         await db.query(`DROP INDEX "public"."IDX_c49c50b30d08544825d192b6d2"`)
+        await db.query(`DROP TABLE "staked_by_users"`)
+        await db.query(`DROP INDEX "public"."IDX_a4fcc0c9d2fa0eff9aa8635881"`)
+        await db.query(`DROP INDEX "public"."IDX_7d34f2aa5715461eba1ecdfec6"`)
+        await db.query(`DROP INDEX "public"."IDX_83e0fa1deefc04defe350ceebd"`)
+        await db.query(`DROP INDEX "public"."IDX_bfe8962de882fe1688b49852b6"`)
         await db.query(`DROP TABLE "user"`)
         await db.query(`DROP TABLE "game_created"`)
         await db.query(`DROP INDEX "public"."IDX_438ac2359d3f5f608e1d91c86e"`)
@@ -49,5 +60,6 @@ module.exports = class Data1706698348034 {
         await db.query(`DROP INDEX "public"."IDX_ab514bcce24a9d9f47b1508438"`)
         await db.query(`ALTER TABLE "sectors_bought" DROP CONSTRAINT "FK_e26b833434a88a25f0a248f8238"`)
         await db.query(`ALTER TABLE "participants_in_games" DROP CONSTRAINT "FK_a909afd5d0d7d16c27aa21ce224"`)
+        await db.query(`ALTER TABLE "staked_by_users" DROP CONSTRAINT "FK_a4fcc0c9d2fa0eff9aa86358818"`)
     }
 }
