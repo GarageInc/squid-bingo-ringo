@@ -44,6 +44,8 @@ export async function saveRewardsClaimed(
       ownerAddress: user.address,
       owner: user,
 
+      claimed: e.claimed,
+
       timestamp: new Date(block.timestamp),
       transactionHash: getHash(event),
     })
