@@ -67,7 +67,6 @@ type StakedByUsers @entity {
   amount: BigInt!
 
   timestamp: DateTime! @index
-  transactionHash: String!
 }
 
 type StakedByUsersTotal @entity {
@@ -78,7 +77,6 @@ type StakedByUsersTotal @entity {
   amount: BigInt!
 
   timestamp: DateTime! @index
-  transactionHash: String!
 }
 
 type Initialized @entity {

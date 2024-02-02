@@ -1,5 +1,5 @@
-module.exports = class Data1706865270600 {
-    name = 'Data1706865270600'
+module.exports = class Data1706869903088 {
+    name = 'Data1706869903088'
 
     async up(db) {
         await db.query(`CREATE TABLE "sectors_bought" ("id" character varying NOT NULL, "owner_address" text NOT NULL, "round" numeric NOT NULL, "sectod_ids" text array NOT NULL, "spin" integer NOT NULL, "game" text NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "transaction_hash" text NOT NULL, "owner_id" character varying, CONSTRAINT "PK_0347d910e30668638dac60566ef" PRIMARY KEY ("id"))`)
@@ -12,12 +12,12 @@ module.exports = class Data1706865270600 {
         await db.query(`CREATE INDEX "IDX_61523535038168a297f3092330" ON "participants_in_games" ("round") `)
         await db.query(`CREATE INDEX "IDX_a909afd5d0d7d16c27aa21ce22" ON "participants_in_games" ("user_id") `)
         await db.query(`CREATE INDEX "IDX_c49c50b30d08544825d192b6d2" ON "participants_in_games" ("timestamp") `)
-        await db.query(`CREATE TABLE "staked_by_users" ("id" character varying NOT NULL, "user_address" text NOT NULL, "game" text NOT NULL, "amount" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "transaction_hash" text NOT NULL, "user_id" character varying, CONSTRAINT "PK_ac47f1cdc23b49af942028773ae" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "staked_by_users" ("id" character varying NOT NULL, "user_address" text NOT NULL, "game" text NOT NULL, "amount" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "user_id" character varying, CONSTRAINT "PK_ac47f1cdc23b49af942028773ae" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_a4fcc0c9d2fa0eff9aa8635881" ON "staked_by_users" ("user_id") `)
         await db.query(`CREATE INDEX "IDX_7d34f2aa5715461eba1ecdfec6" ON "staked_by_users" ("user_address") `)
         await db.query(`CREATE INDEX "IDX_83e0fa1deefc04defe350ceebd" ON "staked_by_users" ("game") `)
         await db.query(`CREATE INDEX "IDX_bfe8962de882fe1688b49852b6" ON "staked_by_users" ("timestamp") `)
-        await db.query(`CREATE TABLE "staked_by_users_total" ("id" character varying NOT NULL, "user_address" text NOT NULL, "amount" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "transaction_hash" text NOT NULL, "user_id" character varying, CONSTRAINT "PK_35a8dfa064e7e1e69e9e25e4b1e" PRIMARY KEY ("id"))`)
+        await db.query(`CREATE TABLE "staked_by_users_total" ("id" character varying NOT NULL, "user_address" text NOT NULL, "amount" numeric NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "user_id" character varying, CONSTRAINT "PK_35a8dfa064e7e1e69e9e25e4b1e" PRIMARY KEY ("id"))`)
         await db.query(`CREATE INDEX "IDX_7c54928dd379b0b9f696f3acd5" ON "staked_by_users_total" ("user_id") `)
         await db.query(`CREATE INDEX "IDX_f34906ca3d91da9604ba3536c4" ON "staked_by_users_total" ("user_address") `)
         await db.query(`CREATE INDEX "IDX_ac31b9824973d91b8a9b8d224a" ON "staked_by_users_total" ("timestamp") `)
