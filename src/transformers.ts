@@ -1,7 +1,7 @@
 
 import { Context, IBlockHeader, LogContext } from './configs'
 import { GameCreatedT, GameFinishedT, InitializedT, SectorsBoughtT } from './events'
-import { GameCreated, GameFinished, Initialized, ParticipantsInGames, SectorsBought, StakedByUsers, User } from './model'
+import { GameCreated, GameFinished, Initialized, ParticipantsInGames, SectorsBought, StakedByUsers, StakedByUsersTotal, User } from './model'
 
 
 function getHash(event: LogContext): string | undefined {
@@ -97,7 +97,8 @@ export async function saveBought(
 
     await saveParticipantInGame(ctx, block, user, e.round, sectors, gameAddress)
     await saveStakedByUsers(ctx, block, user, sectors, gameAddress)
-
+    await saveStakedByUsersTotal(ctx, block, user, sectors)
+    
 
     const transfer = new SectorsBought({
       id: makeId(event),
@@ -175,6 +176,40 @@ export async function saveStakedByUsers(ctx: Context, block: IBlockHeader, user:
   const stakedInfo = new StakedByUsers({
     id: id,
     game,
+    user,
+    amount,
+    userAddress: targetAddress,
+    timestamp: new Date(block.timestamp)
+  })
+
+  return await ctx.store.save([stakedInfo])
+} 
+
+export async function saveStakedByUsersTotal(ctx: Context, block: IBlockHeader, user: User, sectors: string[], game?: string) {
+  const targetAddress = user.address.toLowerCase()
+
+  const id = `${targetAddress}`
+
+  const prevStakedInfo = await ctx.store.findOneBy(StakedByUsersTotal, {
+    id,
+  })
+
+  const gameEntity = await ctx.store.findOneBy(GameCreated, {
+    game,
+  })
+
+  const amount = BigInt(sectors.length) * (gameEntity ? gameEntity.sectorPrice : BigInt(0))
+
+  if (prevStakedInfo) {
+    prevStakedInfo.amount = prevStakedInfo.amount + amount
+
+    await ctx.store.save([prevStakedInfo])
+
+    return prevStakedInfo
+  }
+
+  const stakedInfo = new StakedByUsersTotal({
+    id: id,
     user,
     amount,
     userAddress: targetAddress,

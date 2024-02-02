@@ -2,6 +2,7 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, O
 import {SectorsBought} from "./sectorsBought.model"
 import {ParticipantsInGames} from "./participantsInGames.model"
 import {StakedByUsers} from "./stakedByUsers.model"
+import {StakedByUsersTotal} from "./stakedByUsersTotal.model"
 
 @Entity_()
 export class User {
@@ -23,4 +24,7 @@ export class User {
 
     @OneToMany_(() => StakedByUsers, e => e.user)
     stakedByUser!: StakedByUsers[]
+
+    @OneToMany_(() => StakedByUsersTotal, e => e.user)
+    stakedByUserTotal!: StakedByUsersTotal[]
 }

@@ -4,6 +4,7 @@ type User @entity {
   sectorsBought: [SectorsBought!] @derivedFrom(field: "owner")
   participatedInGames: [ParticipantsInGames!] @derivedFrom(field: "user")
   stakedByUser: [StakedByUsers!] @derivedFrom(field: "user")
+  stakedByUserTotal: [StakedByUsersTotal!] @derivedFrom(field: "user")
 }
 
 type SectorsBought @entity {
@@ -63,6 +64,17 @@ type StakedByUsers @entity {
   userAddress: String! @index
   
   game: String! @index
+  amount: BigInt!
+
+  timestamp: DateTime! @index
+  transactionHash: String!
+}
+
+type StakedByUsersTotal @entity {
+  id: ID!
+  user: User!
+  userAddress: String! @index
+  
   amount: BigInt!
 
   timestamp: DateTime! @index
