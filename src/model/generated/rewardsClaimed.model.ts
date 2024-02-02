@@ -1,10 +1,10 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, ManyToOne as ManyToOne_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
 import * as marshal from "./marshal"
 import {User} from "./user.model"
 
 @Entity_()
-export class SectorsBought {
-    constructor(props?: Partial<SectorsBought>) {
+export class RewardsClaimed {
+    constructor(props?: Partial<RewardsClaimed>) {
         Object.assign(this, props)
     }
 
@@ -12,25 +12,26 @@ export class SectorsBought {
     id!: string
 
     @Index_()
+    @ManyToOne_(() => User, {nullable: true})
+    owner!: User
+
+    @Index_()
     @Column_("text", {nullable: false})
     ownerAddress!: string
 
     @Index_()
-    @ManyToOne_(() => User, {nullable: true})
-    owner!: User
-
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     round!: bigint
 
     @Column_("text", {array: true, nullable: false})
     sectorIds!: (string | undefined | null)[]
 
-    @Column_("int4", {nullable: false})
-    spin!: number
-
     @Index_()
     @Column_("text", {nullable: false})
     game!: string
+
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    claimed!: bigint
 
     @Index_()
     @Column_("timestamp with time zone", {nullable: false})

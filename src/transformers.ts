@@ -1,7 +1,9 @@
 
 import { Context, IBlockHeader, LogContext } from './configs'
-import { GameCreatedT, GameFinishedT, InitializedT, SectorsBoughtT } from './events'
+import { GameCreatedT, GameFinishedT, RewardClaimedT, SectorsBoughtT } from './events'
 import { GameCreated, GameFinished, Initialized, ParticipantsInGames, SectorsBought, StakedByUsers, StakedByUsersTotal, User } from './model'
+import { ClaimedByUsersTotal } from './model/generated/claimedByUsersTotal.model'
+import { RewardsClaimed } from './model/generated/rewardsClaimed.model'
 
 
 function getHash(event: LogContext): string | undefined {
@@ -12,6 +14,45 @@ const getContractAddress = (event: LogContext) => event.transactions[event.trans
 
 const makeId = (event: LogContext) =>
   `${getHash(event)}-${event.transactionIndex}-${event.id}-${event.logIndex}`
+
+export async function saveRewardsClaimed(
+  ctx: Context,
+  transfersData: {
+    e: ReturnType<typeof RewardClaimedT.decode>
+    event: LogContext
+    block: IBlockHeader
+  }[]
+) {
+  const transfers: Set<RewardsClaimed> = new Set()
+
+  for (const transferData of transfersData) {
+    const { e, event, block } = transferData
+
+    const user = await getUser(e.owner, ctx)
+
+    const gameAddress = getContractAddress(event)
+
+    await saveClaimedByUsersTotal(ctx, block, user, e, gameAddress)
+
+    const transfer = new RewardsClaimed({
+      id: makeId(event),
+      
+      round: e.round,
+      game: gameAddress,
+
+      sectorIds: e.sectorIds.map(i => i.toString()),
+      ownerAddress: user.address,
+      owner: user,
+
+      timestamp: new Date(block.timestamp),
+      transactionHash: getHash(event),
+    })
+
+    transfers.add(transfer)
+  }
+
+  await ctx.store.save([...transfers])
+}
 
 export async function saveFinished(
   ctx: Context,
@@ -29,6 +70,9 @@ export async function saveFinished(
     const transfer = new GameFinished({
       id: makeId(event),
       round: e.round,
+
+      totalSpin: e.totalSpin,
+      random: e.random,
 
       timestamp: new Date(block.timestamp),
       transactionHash: getHash(event),
@@ -93,7 +137,7 @@ export async function saveBought(
 
     const gameAddress = getContractAddress(event)
 
-    const sectors = e.sectodIds.map(i => i.toString())
+    const sectors = e.sectorIds.map(i => i.toString())
 
     await saveParticipantInGame(ctx, block, user, e.round, sectors, gameAddress)
     await saveStakedByUsers(ctx, block, user, sectors, gameAddress)
@@ -103,7 +147,7 @@ export async function saveBought(
     const transfer = new SectorsBought({
       id: makeId(event),
       round: e.round,
-      sectodIds: sectors,
+      sectorIds: sectors,
       ownerAddress: e.owner.toLowerCase(),
       owner: user,
       spin: e.spin,
@@ -219,32 +263,36 @@ export async function saveStakedByUsersTotal(ctx: Context, block: IBlockHeader, 
   return await ctx.store.save([stakedInfo])
 } 
 
-export async function saveInitialized(
-  ctx: Context,
-  transfersData: {
-    e: ReturnType<typeof InitializedT.decode>
-    event: LogContext
-    block: IBlockHeader
-  }[]
-) {
-  const transfers: Set<Initialized> = new Set()
+export async function saveClaimedByUsersTotal(ctx: Context, block: IBlockHeader, user: User, event: ReturnType<typeof RewardClaimedT.decode>, game?: string) {
+  const targetAddress = user.address.toLowerCase()
 
-  for (const transferData of transfersData) {
-    const { e, event, block } = transferData
+  const id = `${targetAddress}`
 
-    const transfer = new Initialized({
-      id: makeId(event),
-      version: e.version,
+  const prevStakedInfo = await ctx.store.findOneBy(ClaimedByUsersTotal, {
+    id,
+  })
 
-      timestamp: new Date(block.timestamp),
-      transactionHash: getHash(event),
-    })
+  const amount = event.claimed
 
-    transfers.add(transfer)
+  if (prevStakedInfo) {
+    prevStakedInfo.claimed = prevStakedInfo.claimed + amount
+
+    await ctx.store.save([prevStakedInfo])
+
+    return prevStakedInfo
   }
 
-  await ctx.store.save([...transfers])
-}
+  const stakedInfo = new ClaimedByUsersTotal({
+    id: id,
+    user,
+    claimed: amount,
+    userAddress: targetAddress,
+    timestamp: new Date(block.timestamp)
+  })
+
+  return await ctx.store.save([stakedInfo])
+} 
+
 
 async function getUser(address: string, ctx: Context) {
   const targetAddress = address.toLowerCase()

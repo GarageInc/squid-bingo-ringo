@@ -3,16 +3,13 @@ import {
   GAME_1,
   GAME_2,
   GAME_3,
-  GAME_4,
-  GAME_5,
-  GAME_6,
   BINGO_RINGO,
 } from './contract'
 import {
   GameCreatedT,
   SectorsBoughtT,
-  InitializedT,
-  GameFinishedT
+  GameFinishedT,
+  RewardClaimedT
 } from './events'
 import {
   BlockHeader,
@@ -23,7 +20,7 @@ import {
   Transaction as _Transaction,
 } from '@subsquid/evm-processor'
 
-const FROM = 1416612
+const FROM = 1632725
 
 export const database = new TypeormDatabase()
 
@@ -44,28 +41,16 @@ export const processor = new EvmBatchProcessor()
   })
 
   .addLog({address: [GAME_1], topic0: [GameFinishedT.topic], transaction: true})
-  .addLog({address: [GAME_1], topic0: [InitializedT.topic], transaction: true})
   .addLog({address: [GAME_1], topic0: [SectorsBoughtT.topic], transaction: true})
+  .addLog({address: [GAME_1], topic0: [RewardClaimedT.topic], transaction: true})
 
   .addLog({address: [GAME_2], topic0: [GameFinishedT.topic], transaction: true})
-  .addLog({address: [GAME_2], topic0: [InitializedT.topic], transaction: true})
   .addLog({address: [GAME_2], topic0: [SectorsBoughtT.topic], transaction: true})
+  .addLog({address: [GAME_2], topic0: [RewardClaimedT.topic], transaction: true})
 
   .addLog({address: [GAME_3], topic0: [GameFinishedT.topic], transaction: true})
-  .addLog({address: [GAME_3], topic0: [InitializedT.topic], transaction: true})
   .addLog({address: [GAME_3], topic0: [SectorsBoughtT.topic], transaction: true})
-
-  .addLog({address: [GAME_4], topic0: [GameFinishedT.topic], transaction: true})
-  .addLog({address: [GAME_4], topic0: [InitializedT.topic], transaction: true})
-  .addLog({address: [GAME_4], topic0: [SectorsBoughtT.topic], transaction: true})
-
-  .addLog({address: [GAME_5], topic0: [GameFinishedT.topic], transaction: true})
-  .addLog({address: [GAME_5], topic0: [InitializedT.topic], transaction: true})
-  .addLog({address: [GAME_5], topic0: [SectorsBoughtT.topic], transaction: true})
-
-  .addLog({address: [GAME_6], topic0: [GameFinishedT.topic], transaction: true})
-  .addLog({address: [GAME_6], topic0: [InitializedT.topic], transaction: true})
-  .addLog({address: [GAME_6], topic0: [SectorsBoughtT.topic], transaction: true})
+  .addLog({address: [GAME_3], topic0: [RewardClaimedT.topic], transaction: true})
 
   .addLog({address: [BINGO_RINGO], topic0: [GameCreatedT.topic], transaction: true})
 

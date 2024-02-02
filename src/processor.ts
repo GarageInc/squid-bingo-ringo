@@ -2,14 +2,14 @@ import {
   saveBought,
   saveCreated,
   saveFinished,
-  saveInitialized,
+  saveRewardsClaimed,
 } from './transformers'
-import { IBlockHeader, LogContext, database, processor } from './configs'
+import { LogContext, database, processor } from './configs'
 import {
   GameCreatedT,
   SectorsBoughtT,
-  InitializedT,
-  GameFinishedT
+  GameFinishedT,
+  RewardClaimedT
 } from './events'
 import { LogEvent } from './abi/generated/abi.support'
 import { BlockData } from '@subsquid/evm-processor'
@@ -37,7 +37,7 @@ function handler<T>(block: IBlockData, ctx: LogContext, log: LogEvent<T>) {
 processor.run(database, async (ctx) => {
   const gamesCreated = []
   const sectorsBought = []
-  const initialized = []
+  const rewardsClaimed = []
   const gamesFinished = []
   
   for (const block of ctx.blocks) {
@@ -54,8 +54,8 @@ processor.run(database, async (ctx) => {
           sectorsBought.push(handler(block, logCtx, SectorsBoughtT))
         }
 
-        if (hasIn(logCtx, InitializedT.topic)) {
-          initialized.push(handler(block, logCtx, InitializedT))
+        if (hasIn(logCtx, RewardClaimedT.topic)) {
+          rewardsClaimed.push(handler(block, logCtx, RewardClaimedT))
         }
 
         if (hasIn(logCtx, GameFinishedT.topic)) {
@@ -71,6 +71,6 @@ processor.run(database, async (ctx) => {
 
   await saveBought(ctx, sectorsBought)
 
-  await saveInitialized(ctx, initialized)
+  await saveRewardsClaimed(ctx, rewardsClaimed)
 })
 

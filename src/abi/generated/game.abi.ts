@@ -64,6 +64,16 @@ export const ABI_JSON = [
                 "type": "uint256",
                 "name": "round",
                 "indexed": true
+            },
+            {
+                "type": "uint256",
+                "name": "random",
+                "indexed": false
+            },
+            {
+                "type": "int32",
+                "name": "totalSpin",
+                "indexed": false
             }
         ]
     },
@@ -75,6 +85,37 @@ export const ABI_JSON = [
             {
                 "type": "uint64",
                 "name": "version",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
+        "name": "Initialized",
+        "inputs": [
+            {
+                "type": "string",
+                "name": "name",
+                "indexed": false
+            },
+            {
+                "type": "uint256",
+                "name": "sectorAmount",
+                "indexed": false
+            },
+            {
+                "type": "uint256",
+                "name": "everyNSectorIsAWinner",
+                "indexed": false
+            },
+            {
+                "type": "uint256[]",
+                "name": "prizes"
+            },
+            {
+                "type": "uint256",
+                "name": "sectorPrice",
                 "indexed": false
             }
         ]
@@ -99,6 +140,32 @@ export const ABI_JSON = [
     {
         "type": "event",
         "anonymous": false,
+        "name": "RewardsClaimed",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "owner",
+                "indexed": false
+            },
+            {
+                "type": "uint256",
+                "name": "round",
+                "indexed": false
+            },
+            {
+                "type": "uint256[]",
+                "name": "sectorIds"
+            },
+            {
+                "type": "uint256",
+                "name": "claimed",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
         "name": "SectorsBought",
         "inputs": [
             {
@@ -113,7 +180,7 @@ export const ABI_JSON = [
             },
             {
                 "type": "uint32[]",
-                "name": "sectodIds"
+                "name": "sectorIds"
             },
             {
                 "type": "int32",
@@ -188,7 +255,12 @@ export const ABI_JSON = [
                 "name": "sectorIds"
             }
         ],
-        "outputs": []
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": ""
+            }
+        ]
     },
     {
         "type": "function",

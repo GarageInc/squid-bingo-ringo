@@ -17,6 +17,12 @@ export class GameFinished {
     @Column_("text", {nullable: false})
     game!: string
 
+    @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+    random!: bigint
+
+    @Column_("int4", {nullable: false})
+    totalSpin!: number
+
     @Index_()
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date

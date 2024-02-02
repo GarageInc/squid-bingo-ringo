@@ -5,16 +5,22 @@ import {ABI_JSON} from './game.abi'
 export const abi = new ethers.Interface(ABI_JSON);
 
 export const events = {
-    GameFinished: new LogEvent<([round: bigint] & {round: bigint})>(
-        abi, '0x6543ec12c6e53f26532beb5289ef5732dcd77c2e9e9921ae42b695905f5e84c0'
+    GameFinished: new LogEvent<([round: bigint, random: bigint, totalSpin: number] & {round: bigint, random: bigint, totalSpin: number})>(
+        abi, '0x00b0c245cf541f01114d267121d845c6850b17ae97cab2ed85d0981f866b78d9'
     ),
-    Initialized: new LogEvent<([version: bigint] & {version: bigint})>(
+    'Initialized(uint64)': new LogEvent<([version: bigint] & {version: bigint})>(
         abi, '0xc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d2'
+    ),
+    'Initialized(string,uint256,uint256,uint256[],uint256)': new LogEvent<([name: string, sectorAmount: bigint, everyNSectorIsAWinner: bigint, prizes: Array<bigint>, sectorPrice: bigint] & {name: string, sectorAmount: bigint, everyNSectorIsAWinner: bigint, prizes: Array<bigint>, sectorPrice: bigint})>(
+        abi, '0xc3fd971b82b801a62eaefb178cbc9c4c866b2d35dfec4729ab043512b3814700'
     ),
     OwnershipTransferred: new LogEvent<([previousOwner: string, newOwner: string] & {previousOwner: string, newOwner: string})>(
         abi, '0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0'
     ),
-    SectorsBought: new LogEvent<([owner: string, round: bigint, sectodIds: Array<number>, spin: number] & {owner: string, round: bigint, sectodIds: Array<number>, spin: number})>(
+    RewardsClaimed: new LogEvent<([owner: string, round: bigint, sectorIds: Array<bigint>, claimed: bigint] & {owner: string, round: bigint, sectorIds: Array<bigint>, claimed: bigint})>(
+        abi, '0xb75fcac1fb337298c9e9a4e54cabc43b96aa51704e08637a259e63e153762950'
+    ),
+    SectorsBought: new LogEvent<([owner: string, round: bigint, sectorIds: Array<number>, spin: number] & {owner: string, round: bigint, sectorIds: Array<number>, spin: number})>(
         abi, '0x946870df20e4dbbbb2261672b9953d5d78b916d0c833f0f60b8818a7583c030f'
     ),
 }
@@ -29,7 +35,7 @@ export const functions = {
     buy: new Func<[sectorIds: Array<number>, spin: number], {sectorIds: Array<number>, spin: number}, []>(
         abi, '0x29a6c93c'
     ),
-    claimRewards: new Func<[round: bigint, sectorIds: Array<bigint>], {round: bigint, sectorIds: Array<bigint>}, []>(
+    claimRewards: new Func<[round: bigint, sectorIds: Array<bigint>], {round: bigint, sectorIds: Array<bigint>}, bigint>(
         abi, '0xb0ee5e28'
     ),
     destroy: new Func<[], {}, []>(

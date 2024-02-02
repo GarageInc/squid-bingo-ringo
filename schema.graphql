@@ -5,6 +5,9 @@ type User @entity {
   participatedInGames: [ParticipantsInGames!] @derivedFrom(field: "user")
   stakedByUser: [StakedByUsers!] @derivedFrom(field: "user")
   stakedByUserTotal: [StakedByUsersTotal!] @derivedFrom(field: "user")
+
+  rewardsClaimed: [RewardsClaimed!] @derivedFrom(field: "owner")
+  claimedByUserTotal: [ClaimedByUsersTotal!] @derivedFrom(field: "user")
 }
 
 type SectorsBought @entity {
@@ -14,7 +17,7 @@ type SectorsBought @entity {
   owner: User!
 
   round: BigInt!
-  sectodIds: [String]!
+  sectorIds: [String]!
   spin: Int!
 
   game: String! @index
@@ -54,6 +57,9 @@ type GameFinished @entity {
 
   game: String! @index
 
+  random: BigInt!
+  totalSpin: Int!
+
   timestamp: DateTime! @index
   transactionHash: String!
 }
@@ -75,6 +81,31 @@ type StakedByUsersTotal @entity {
   userAddress: String! @index
   
   amount: BigInt!
+
+  timestamp: DateTime! @index
+}
+
+type RewardsClaimed @entity {
+  id: ID!
+  owner: User!
+  ownerAddress: String! @index
+  
+  round: BigInt! @index
+  sectorIds: [String]!
+
+  game: String! @index
+  claimed: BigInt!
+
+  timestamp: DateTime! @index
+  transactionHash: String!
+}
+
+type ClaimedByUsersTotal @entity {
+  id: ID!
+  user: User!
+  userAddress: String! @index
+  
+  claimed: BigInt!
 
   timestamp: DateTime! @index
 }
