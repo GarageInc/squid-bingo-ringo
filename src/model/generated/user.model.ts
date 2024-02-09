@@ -3,6 +3,7 @@ import {SectorsBought} from "./sectorsBought.model"
 import {ParticipantsInGames} from "./participantsInGames.model"
 import {StakedByUsers} from "./stakedByUsers.model"
 import {StakedByUsersTotal} from "./stakedByUsersTotal.model"
+import {GameFinishedForUser} from "./gameFinishedForUser.model"
 import {RewardsClaimed} from "./rewardsClaimed.model"
 import {ClaimedByUsersTotal} from "./claimedByUsersTotal.model"
 
@@ -29,6 +30,9 @@ export class User {
 
     @OneToMany_(() => StakedByUsersTotal, e => e.user)
     stakedByUserTotal!: StakedByUsersTotal[]
+
+    @OneToMany_(() => GameFinishedForUser, e => e.user)
+    gameFinishedForUser!: GameFinishedForUser[]
 
     @OneToMany_(() => RewardsClaimed, e => e.owner)
     rewardsClaimed!: RewardsClaimed[]

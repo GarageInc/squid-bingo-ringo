@@ -1,5 +1,6 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
+import {GameFinishedForUser} from "./gameFinishedForUser.model"
 
 @Entity_()
 export class GameFinished {
@@ -22,6 +23,9 @@ export class GameFinished {
 
     @Column_("int4", {nullable: false})
     totalSpin!: number
+
+    @OneToMany_(() => GameFinishedForUser, e => e.gameFinished)
+    gameFinishedForUser!: GameFinishedForUser[]
 
     @Index_()
     @Column_("timestamp with time zone", {nullable: false})
