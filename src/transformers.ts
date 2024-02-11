@@ -4,7 +4,6 @@ import {
   GameCreated,
   GameFinished,
   GameFinishedForUser,
-  Initialized,
   ParticipantsInGames,
   SectorsBought,
   StakedByUsers,
@@ -259,6 +258,7 @@ export async function saveStakedByUsers(
 
   if (prevStakedInfo) {
     prevStakedInfo.amount = prevStakedInfo.amount + amount
+    prevStakedInfo.timestamp = new Date(block.timestamp)
 
     await ctx.store.save([prevStakedInfo])
 
