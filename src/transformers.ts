@@ -14,10 +14,15 @@ import { ClaimedByUsersTotal } from './model/generated/claimedByUsersTotal.model
 import { RewardsClaimed } from './model/generated/rewardsClaimed.model'
 
 function getHash(event: LogContext): string | undefined {
-  return event.transactions[event.transactionIndex]?.hash || event.block.hash
+  const targetTx = event.transactions.find((tx) => tx.transactionIndex === event.transactionIndex)
+  return targetTx?.hash || event.block?.hash || event?.header?.hash || event?.id
 }
 
-const getContractAddress = (event: LogContext) => event.transactions[event.transactionIndex]?.to?.toLowerCase()
+const getContractAddress = (event: LogContext) => {
+  const targetTx = event.transactions.find((tx) => tx.transactionIndex === event.transactionIndex)
+
+  return targetTx?.to
+}
 
 const makeId = (event: LogContext) => `${getHash(event)}-${event.transactionIndex}-${event.id}-${event.logIndex}`
 
@@ -77,6 +82,8 @@ export async function saveFinished(
   for (const transferData of transfersData) {
     const { e, event, block } = transferData
 
+    const contractGameAddress = getContractAddress(event)
+
     const transfer = new GameFinished({
       id: makeId(event),
       round: e.round,
@@ -87,7 +94,7 @@ export async function saveFinished(
       timestamp: new Date(block.timestamp),
       transactionHash: getHash(event),
 
-      game: getContractAddress(event),
+      game: contractGameAddress,
     })
 
     const allParticipants = await ctx.store.find(ParticipantsInGames, {
