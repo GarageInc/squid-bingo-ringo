@@ -1,9 +1,9 @@
-export const BINGO_RINGO = '0x7FA0091C927306B3b2c6eCcfE541Cc718238A413'.toLowerCase()
+export const BINGO_RINGO = '0x2472F671227e341f1E11e53095a861E681110d45'.toLowerCase()
 
-export const GAME_0 = '0x64f992DDFA79f25b9fd43e3A30fe04767A78E7c9'.toLowerCase()
+export const GAME_0 = '0xee50ccc3f7738c99d0ece5f715217621ee43ecf7'.toLowerCase()
 
-export const GAME_1 = '0xc867e018e4d67e955f83db92430f97fb0bbdbab5'.toLowerCase()
-export const GAME_2 = '0x3dc56e20f5c6c7931c7182db66e6e17917c2a95f'.toLowerCase()
-export const GAME_3 = '0x782e33aabf7eb6c168424ab7548fde029f0e5a90'.toLowerCase()
+export const GAME_1 = '0xbc5770328178a74c1c13e311ce96a543f7285153'.toLowerCase()
+export const GAME_2 = '0xa5645bd704009efb797ca8d10aac34a4ddf774cf'.toLowerCase()
+export const GAME_3 = '0xcc1303146932550ddc8cf9b115e87af24ec7235d'.toLowerCase()
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
