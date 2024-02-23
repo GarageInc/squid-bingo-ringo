@@ -1,1 +1,164 @@
-[{"type":"constructor","stateMutability":"nonpayable","inputs":[{"type":"address","name":"_gameLogicImplementation","internalType":"address"}]},{"type":"error","name":"ERC1167FailedCreateClone","inputs":[]},{"type":"error","name":"OwnableInvalidOwner","inputs":[{"type":"address","name":"owner","internalType":"address"}]},{"type":"error","name":"OwnableUnauthorizedAccount","inputs":[{"type":"address","name":"account","internalType":"address"}]},{"type":"error","name":"PrizeIsTooLow","inputs":[{"type":"uint256","name":"prizeIndex","internalType":"uint256"}]},{"type":"event","name":"GameCreated","inputs":[{"type":"address","name":"game","internalType":"address","indexed":false},{"type":"string","name":"name","internalType":"string","indexed":false},{"type":"uint256","name":"sectorsAmount","internalType":"uint256","indexed":false},{"type":"uint256","name":"everyNSectorIsAWinner","internalType":"uint256","indexed":false},{"type":"uint256[]","name":"prizes","internalType":"uint256[]","indexed":false},{"type":"uint256","name":"sectorPrice","internalType":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"OwnershipTransferred","inputs":[{"type":"address","name":"previousOwner","internalType":"address","indexed":true},{"type":"address","name":"newOwner","internalType":"address","indexed":true}],"anonymous":false},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address"}],"name":"activeGames","inputs":[{"type":"uint256","name":"","internalType":"uint256"}]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"deleteGame","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address"}],"name":"gameLogicImplementation","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"string","name":"name","internalType":"string"},{"type":"uint256","name":"sectorsAmount","internalType":"uint256"},{"type":"uint256","name":"everyNSectorIsAWinner","internalType":"uint256"},{"type":"uint256","name":"sectorPrice","internalType":"uint256"}],"name":"games","inputs":[{"type":"address","name":"","internalType":"address"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"address[]","name":"","internalType":"address[]"}],"name":"getActiveGames","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[{"type":"address","name":"game","internalType":"address"}],"name":"initGame","inputs":[{"type":"string","name":"name","internalType":"string"},{"type":"uint256","name":"sectorsAmount","internalType":"uint256"},{"type":"uint256","name":"everyNSectorIsAWinner","internalType":"uint256"},{"type":"uint256[]","name":"prizes","internalType":"uint256[]"},{"type":"uint256","name":"sectorPrice","internalType":"uint256"}]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"maxSectorsAmount","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"uint256","name":"","internalType":"uint256"}],"name":"minSectorsAmount","inputs":[]},{"type":"function","stateMutability":"view","outputs":[{"type":"address","name":"","internalType":"address"}],"name":"owner","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"renounceOwnership","inputs":[]},{"type":"function","stateMutability":"nonpayable","outputs":[],"name":"transferOwnership","inputs":[{"type":"address","name":"newOwner","internalType":"address"}]}]
+[
+  {
+    "type": "constructor",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "type": "address", "name": "_gameLogicImplementation", "internalType": "address" },
+      { "type": "address", "name": "_freeGameLogicImplementation", "internalType": "address" }
+    ]
+  },
+  { "type": "error", "name": "ERC1167FailedCreateClone", "inputs": [] },
+  {
+    "type": "error",
+    "name": "OwnableInvalidOwner",
+    "inputs": [{ "type": "address", "name": "owner", "internalType": "address" }]
+  },
+  {
+    "type": "error",
+    "name": "OwnableUnauthorizedAccount",
+    "inputs": [{ "type": "address", "name": "account", "internalType": "address" }]
+  },
+  {
+    "type": "error",
+    "name": "PrizeIsTooLow",
+    "inputs": [{ "type": "uint256", "name": "prizeIndex", "internalType": "uint256" }]
+  },
+  {
+    "type": "event",
+    "name": "GameCreated",
+    "inputs": [
+      { "type": "address", "name": "game", "internalType": "address", "indexed": false },
+      { "type": "string", "name": "name", "internalType": "string", "indexed": false },
+      { "type": "uint256", "name": "sectorsAmount", "internalType": "uint256", "indexed": false },
+      { "type": "uint256", "name": "everyNSectorIsAWinner", "internalType": "uint256", "indexed": false },
+      { "type": "uint256[]", "name": "prizes", "internalType": "uint256[]", "indexed": false },
+      { "type": "uint256", "name": "sectorPrice", "internalType": "uint256", "indexed": false }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      { "type": "address", "name": "previousOwner", "internalType": "address", "indexed": true },
+      { "type": "address", "name": "newOwner", "internalType": "address", "indexed": true }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "activeGames",
+    "inputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "freeGame",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "freeGameLogicImplementation",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "gameLogicImplementation",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "string", "name": "name", "internalType": "string" },
+      { "type": "uint256", "name": "sectorsAmount", "internalType": "uint256" },
+      { "type": "uint256", "name": "everyNSectorIsAWinner", "internalType": "uint256" },
+      { "type": "uint256", "name": "sectorPrice", "internalType": "uint256" }
+    ],
+    "name": "games",
+    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address[]", "name": "", "internalType": "address[]" }],
+    "name": "getActiveGames",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "address", "name": "_freeGame", "internalType": "address payable" }],
+    "name": "initFreeGame",
+    "inputs": [
+      { "type": "string", "name": "name", "internalType": "string" },
+      { "type": "uint256", "name": "sectorsAmount", "internalType": "uint256" },
+      { "type": "uint256", "name": "everyNSectorIsAWinner", "internalType": "uint256" },
+      { "type": "uint256[]", "name": "prizes", "internalType": "uint256[]" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "address", "name": "game", "internalType": "address" }],
+    "name": "initGame",
+    "inputs": [
+      { "type": "string", "name": "name", "internalType": "string" },
+      { "type": "uint256", "name": "sectorsAmount", "internalType": "uint256" },
+      { "type": "uint256", "name": "everyNSectorIsAWinner", "internalType": "uint256" },
+      { "type": "uint256[]", "name": "prizes", "internalType": "uint256[]" },
+      { "type": "uint256", "name": "sectorPrice", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "maxSectorsAmount",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "minSectorsAmount",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "owner",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "pauseGame",
+    "inputs": [{ "type": "address", "name": "game", "internalType": "address" }]
+  },
+  { "type": "function", "stateMutability": "nonpayable", "outputs": [], "name": "renounceOwnership", "inputs": [] },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "transferOwnership",
+    "inputs": [{ "type": "address", "name": "newOwner", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "withdrawFees",
+    "inputs": [{ "type": "address", "name": "game", "internalType": "address" }]
+  },
+  { "type": "receive", "stateMutability": "payable" }
+]

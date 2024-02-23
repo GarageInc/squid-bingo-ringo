@@ -1,5 +1,5 @@
 import { TypeormDatabase, Store } from '@subsquid/typeorm-store'
-import { GAME_1, GAME_2, GAME_3, BINGO_RINGO } from './contract'
+import { GAME_1, GAME_2, GAME_3, BINGO_RINGO, GAME_0 } from './contract'
 import { GameCreatedT, SectorsBoughtT, GameFinishedT, RewardClaimedT } from './events'
 import {
   BlockHeader,
@@ -10,7 +10,7 @@ import {
   Transaction as _Transaction,
 } from '@subsquid/evm-processor'
 
-const FROM = 1632725
+const FROM = 1939557
 
 export const database = new TypeormDatabase()
 
@@ -29,6 +29,9 @@ export const processor = new EvmBatchProcessor()
       from: true,
     },
   })
+  .addLog({ address: [GAME_0], topic0: [GameFinishedT.topic], transaction: true })
+  .addLog({ address: [GAME_0], topic0: [SectorsBoughtT.topic], transaction: true })
+  .addLog({ address: [GAME_0], topic0: [RewardClaimedT.topic], transaction: true })
 
   .addLog({ address: [GAME_1], topic0: [GameFinishedT.topic], transaction: true })
   .addLog({ address: [GAME_1], topic0: [SectorsBoughtT.topic], transaction: true })

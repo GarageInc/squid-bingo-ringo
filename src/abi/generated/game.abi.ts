@@ -7,6 +7,16 @@ export const ABI_JSON = [
     },
     {
         "type": "error",
+        "name": "EnforcedPause",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "ExpectedPause",
+        "inputs": []
+    },
+    {
+        "type": "error",
         "name": "IncorrectSectorId",
         "inputs": [
             {
@@ -140,17 +150,29 @@ export const ABI_JSON = [
     {
         "type": "event",
         "anonymous": false,
+        "name": "Paused",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "account",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
         "name": "RewardsClaimed",
         "inputs": [
             {
                 "type": "address",
                 "name": "owner",
-                "indexed": false
+                "indexed": true
             },
             {
                 "type": "uint256",
                 "name": "round",
-                "indexed": false
+                "indexed": true
             },
             {
                 "type": "uint256[]",
@@ -185,6 +207,18 @@ export const ABI_JSON = [
             {
                 "type": "int32",
                 "name": "spin",
+                "indexed": false
+            }
+        ]
+    },
+    {
+        "type": "event",
+        "anonymous": false,
+        "name": "Unpaused",
+        "inputs": [
+            {
+                "type": "address",
+                "name": "account",
                 "indexed": false
             }
         ]
@@ -264,6 +298,20 @@ export const ABI_JSON = [
     },
     {
         "type": "function",
+        "name": "collectedFees",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": ""
+            }
+        ]
+    },
+    {
+        "type": "function",
         "name": "destroy",
         "constant": false,
         "payable": false,
@@ -273,6 +321,20 @@ export const ABI_JSON = [
     {
         "type": "function",
         "name": "everyNSectorIsAWinner",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": ""
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "feePerRound",
         "constant": true,
         "stateMutability": "view",
         "payable": false,
@@ -409,6 +471,10 @@ export const ABI_JSON = [
             {
                 "type": "uint256",
                 "name": "sectorPrice_"
+            },
+            {
+                "type": "uint256",
+                "name": "feesCollectedEachRound_"
             }
         ],
         "outputs": []
@@ -437,6 +503,42 @@ export const ABI_JSON = [
         "outputs": [
             {
                 "type": "address",
+                "name": ""
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "pause",
+        "constant": false,
+        "payable": false,
+        "inputs": [],
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "pauseStartRound",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": ""
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "paused",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "bool",
                 "name": ""
             }
         ]
@@ -581,6 +683,14 @@ export const ABI_JSON = [
                 "name": "newOwner"
             }
         ],
+        "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "withdrawFees",
+        "constant": false,
+        "payable": false,
+        "inputs": [],
         "outputs": []
     }
 ]

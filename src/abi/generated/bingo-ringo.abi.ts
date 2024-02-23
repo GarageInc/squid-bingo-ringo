@@ -7,6 +7,10 @@ export const ABI_JSON = [
             {
                 "type": "address",
                 "name": "_gameLogicImplementation"
+            },
+            {
+                "type": "address",
+                "name": "_freeGameLogicImplementation"
             }
         ]
     },
@@ -119,11 +123,31 @@ export const ABI_JSON = [
     },
     {
         "type": "function",
-        "name": "deleteGame",
-        "constant": false,
+        "name": "freeGame",
+        "constant": true,
+        "stateMutability": "view",
         "payable": false,
         "inputs": [],
-        "outputs": []
+        "outputs": [
+            {
+                "type": "address",
+                "name": ""
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "freeGameLogicImplementation",
+        "constant": true,
+        "stateMutability": "view",
+        "payable": false,
+        "inputs": [],
+        "outputs": [
+            {
+                "type": "address",
+                "name": ""
+            }
+        ]
     },
     {
         "type": "function",
@@ -181,6 +205,36 @@ export const ABI_JSON = [
             {
                 "type": "address[]",
                 "name": ""
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "initFreeGame",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "string",
+                "name": "name"
+            },
+            {
+                "type": "uint256",
+                "name": "sectorsAmount"
+            },
+            {
+                "type": "uint256",
+                "name": "everyNSectorIsAWinner"
+            },
+            {
+                "type": "uint256[]",
+                "name": "prizes"
+            }
+        ],
+        "outputs": [
+            {
+                "type": "address",
+                "name": "_freeGame"
             }
         ]
     },
@@ -262,6 +316,19 @@ export const ABI_JSON = [
     },
     {
         "type": "function",
+        "name": "pauseGame",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "address",
+                "name": "game"
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "type": "function",
         "name": "renounceOwnership",
         "constant": false,
         "payable": false,
@@ -280,5 +347,22 @@ export const ABI_JSON = [
             }
         ],
         "outputs": []
+    },
+    {
+        "type": "function",
+        "name": "withdrawFees",
+        "constant": false,
+        "payable": false,
+        "inputs": [
+            {
+                "type": "address",
+                "name": "game"
+            }
+        ],
+        "outputs": []
+    },
+    {
+        "type": "receive",
+        "stateMutability": "payable"
     }
 ]

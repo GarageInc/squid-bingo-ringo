@@ -17,8 +17,11 @@ export const functions = {
     activeGames: new Func<[_: bigint], {}, string>(
         abi, '0x13e4c714'
     ),
-    deleteGame: new Func<[], {}, []>(
-        abi, '0xc8011be9'
+    freeGame: new Func<[], {}, string>(
+        abi, '0x176ba479'
+    ),
+    freeGameLogicImplementation: new Func<[], {}, string>(
+        abi, '0x3793d472'
     ),
     gameLogicImplementation: new Func<[], {}, string>(
         abi, '0xf5c52a9a'
@@ -28,6 +31,9 @@ export const functions = {
     ),
     getActiveGames: new Func<[], {}, Array<string>>(
         abi, '0x1b76929c'
+    ),
+    initFreeGame: new Func<[name: string, sectorsAmount: bigint, everyNSectorIsAWinner: bigint, prizes: Array<bigint>], {name: string, sectorsAmount: bigint, everyNSectorIsAWinner: bigint, prizes: Array<bigint>}, string>(
+        abi, '0x66c1a984'
     ),
     initGame: new Func<[name: string, sectorsAmount: bigint, everyNSectorIsAWinner: bigint, prizes: Array<bigint>, sectorPrice: bigint], {name: string, sectorsAmount: bigint, everyNSectorIsAWinner: bigint, prizes: Array<bigint>, sectorPrice: bigint}, string>(
         abi, '0xca343298'
@@ -41,11 +47,17 @@ export const functions = {
     owner: new Func<[], {}, string>(
         abi, '0x8da5cb5b'
     ),
+    pauseGame: new Func<[game: string], {game: string}, []>(
+        abi, '0x8b9bfcb0'
+    ),
     renounceOwnership: new Func<[], {}, []>(
         abi, '0x715018a6'
     ),
     transferOwnership: new Func<[newOwner: string], {newOwner: string}, []>(
         abi, '0xf2fde38b'
+    ),
+    withdrawFees: new Func<[game: string], {game: string}, []>(
+        abi, '0x164e68de'
     ),
 }
 
@@ -53,6 +65,14 @@ export class Contract extends ContractBase {
 
     activeGames(arg0: bigint): Promise<string> {
         return this.eth_call(functions.activeGames, [arg0])
+    }
+
+    freeGame(): Promise<string> {
+        return this.eth_call(functions.freeGame, [])
+    }
+
+    freeGameLogicImplementation(): Promise<string> {
+        return this.eth_call(functions.freeGameLogicImplementation, [])
     }
 
     gameLogicImplementation(): Promise<string> {

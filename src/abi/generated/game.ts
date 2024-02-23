@@ -17,11 +17,17 @@ export const events = {
     OwnershipTransferred: new LogEvent<([previousOwner: string, newOwner: string] & {previousOwner: string, newOwner: string})>(
         abi, '0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0'
     ),
+    Paused: new LogEvent<([account: string] & {account: string})>(
+        abi, '0x62e78cea01bee320cd4e420270b5ea74000d11b0c9f74754ebdbfc544b05a258'
+    ),
     RewardsClaimed: new LogEvent<([owner: string, round: bigint, sectorIds: Array<bigint>, claimed: bigint] & {owner: string, round: bigint, sectorIds: Array<bigint>, claimed: bigint})>(
         abi, '0xb75fcac1fb337298c9e9a4e54cabc43b96aa51704e08637a259e63e153762950'
     ),
     SectorsBought: new LogEvent<([owner: string, round: bigint, sectorIds: Array<number>, spin: number] & {owner: string, round: bigint, sectorIds: Array<number>, spin: number})>(
         abi, '0x946870df20e4dbbbb2261672b9953d5d78b916d0c833f0f60b8818a7583c030f'
+    ),
+    Unpaused: new LogEvent<([account: string] & {account: string})>(
+        abi, '0x5db9ee0a495bf2e6ff9c91a7834c1ba4fdd244a5e8aa4e537bd38aeae4b073aa'
     ),
 }
 
@@ -38,11 +44,17 @@ export const functions = {
     claimRewards: new Func<[round: bigint, sectorIds: Array<bigint>], {round: bigint, sectorIds: Array<bigint>}, bigint>(
         abi, '0xb0ee5e28'
     ),
+    collectedFees: new Func<[], {}, bigint>(
+        abi, '0x9003adfe'
+    ),
     destroy: new Func<[], {}, []>(
         abi, '0x83197ef0'
     ),
     everyNSectorIsAWinner: new Func<[], {}, bigint>(
         abi, '0x446455fb'
+    ),
+    feePerRound: new Func<[], {}, bigint>(
+        abi, '0x0668b556'
     ),
     getBoughtSectors: new Func<[], {}, Array<number>>(
         abi, '0x470e9394'
@@ -59,14 +71,23 @@ export const functions = {
     getTotalPrize: new Func<[_owner: string, round: bigint, sectorIds: Array<bigint>], {_owner: string, round: bigint, sectorIds: Array<bigint>}, bigint>(
         abi, '0x5d22cd84'
     ),
-    init: new Func<[name_: string, sectorsAmount_: bigint, everyNSectorIsAWinner_: bigint, prizes_: Array<bigint>, sectorPrice_: bigint], {name_: string, sectorsAmount_: bigint, everyNSectorIsAWinner_: bigint, prizes_: Array<bigint>, sectorPrice_: bigint}, []>(
-        abi, '0x6c9037c5'
+    init: new Func<[name_: string, sectorsAmount_: bigint, everyNSectorIsAWinner_: bigint, prizes_: Array<bigint>, sectorPrice_: bigint, feesCollectedEachRound_: bigint], {name_: string, sectorsAmount_: bigint, everyNSectorIsAWinner_: bigint, prizes_: Array<bigint>, sectorPrice_: bigint, feesCollectedEachRound_: bigint}, []>(
+        abi, '0xd78126e5'
     ),
     name: new Func<[], {}, string>(
         abi, '0x06fdde03'
     ),
     owner: new Func<[], {}, string>(
         abi, '0x8da5cb5b'
+    ),
+    pause: new Func<[], {}, []>(
+        abi, '0x8456cb59'
+    ),
+    pauseStartRound: new Func<[], {}, bigint>(
+        abi, '0x199c324b'
+    ),
+    paused: new Func<[], {}, boolean>(
+        abi, '0x5c975abb'
     ),
     prizes: new Func<[_: bigint], {}, bigint>(
         abi, '0xeccb3a4f'
@@ -95,6 +116,9 @@ export const functions = {
     transferOwnership: new Func<[newOwner: string], {newOwner: string}, []>(
         abi, '0xf2fde38b'
     ),
+    withdrawFees: new Func<[], {}, []>(
+        abi, '0x476343ee'
+    ),
 }
 
 export class Contract extends ContractBase {
@@ -107,8 +131,16 @@ export class Contract extends ContractBase {
         return this.eth_call(functions.boughtSectors, [arg0])
     }
 
+    collectedFees(): Promise<bigint> {
+        return this.eth_call(functions.collectedFees, [])
+    }
+
     everyNSectorIsAWinner(): Promise<bigint> {
         return this.eth_call(functions.everyNSectorIsAWinner, [])
+    }
+
+    feePerRound(): Promise<bigint> {
+        return this.eth_call(functions.feePerRound, [])
     }
 
     getBoughtSectors(): Promise<Array<number>> {
@@ -133,6 +165,14 @@ export class Contract extends ContractBase {
 
     owner(): Promise<string> {
         return this.eth_call(functions.owner, [])
+    }
+
+    pauseStartRound(): Promise<bigint> {
+        return this.eth_call(functions.pauseStartRound, [])
+    }
+
+    paused(): Promise<boolean> {
+        return this.eth_call(functions.paused, [])
     }
 
     prizes(arg0: bigint): Promise<bigint> {
