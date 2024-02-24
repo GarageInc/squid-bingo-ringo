@@ -30,6 +30,9 @@ export class GameCreated {
     @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
     sectorPrice!: bigint
 
+    @Column_("bool", {nullable: false})
+    paused!: boolean
+
     @Index_()
     @Column_("timestamp with time zone", {nullable: false})
     timestamp!: Date

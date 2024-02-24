@@ -47,6 +47,7 @@ type GameCreated @entity {
   everyNSectorIsAWinner: BigInt!
   prizes: [String]!
   sectorPrice: BigInt!
+  paused: Boolean!
 
   timestamp: DateTime! @index
   transactionHash: String!

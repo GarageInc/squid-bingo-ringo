@@ -1,5 +1,5 @@
 import { Context, IBlockHeader, LogContext } from './configs'
-import { GameCreatedT, GameFinishedT, RewardClaimedT, SectorsBoughtT } from './events'
+import { GameCreatedT, GameFinishedT, PausedT, RewardClaimedT, SectorsBoughtT, UnPausedT } from './events'
 import {
   GameCreated,
   GameFinished,
@@ -25,6 +25,52 @@ const getContractAddress = (event: LogContext) => {
 }
 
 const makeId = (event: LogContext) => `${getHash(event)}-${event.transactionIndex}-${event.id}-${event.logIndex}`
+
+export async function savePaused(
+  ctx: Context,
+  transfersData: {
+    e: ReturnType<typeof PausedT.decode>
+    event: LogContext
+    block: IBlockHeader
+  }[]
+) {
+  for (const transferData of transfersData) {
+    const { event } = transferData
+
+    const gameCreated = await ctx.store.findOneBy(GameCreated, {
+      game: getContractAddress(event),
+    })
+
+    if (gameCreated) {
+      gameCreated.paused = true
+
+      await ctx.store.save([gameCreated])
+    }
+  }
+}
+
+export async function saveUnpaused(
+  ctx: Context,
+  transfersData: {
+    e: ReturnType<typeof UnPausedT.decode>
+    event: LogContext
+    block: IBlockHeader
+  }[]
+) {
+  for (const transferData of transfersData) {
+    const { event, e } = transferData
+
+    const gameCreated = await ctx.store.findOneBy(GameCreated, {
+      game: getContractAddress(event),
+    })
+
+    if (gameCreated) {
+      gameCreated.paused = false
+
+      await ctx.store.save([gameCreated])
+    }
+  }
+}
 
 export async function saveRewardsClaimed(
   ctx: Context,
@@ -146,6 +192,7 @@ export async function saveCreated(
     const transfer = new GameCreated({
       id: makeId(event),
       game: e.game.toLowerCase(),
+      paused: false,
 
       name: e.name,
       sectorsAmount: e.sectorsAmount,
