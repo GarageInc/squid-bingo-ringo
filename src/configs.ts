@@ -17,7 +17,7 @@ export const database = new TypeormDatabase()
 export const processor = new EvmBatchProcessor()
   .setBlockRange({ from: FROM })
   .setFinalityConfirmation(12)
-  .setRpcEndpoint('https://rpc.testnet.ms')
+  .setRpcEndpoint('https://crossfi-testnet.blastapi.io/33bd6bb7-36c7-464b-9a19-502d6691e774')
   .setFields({
     log: {
       topics: true,

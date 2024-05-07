@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: bingo-ringo # set name
-version: 12 # version, must be an integer
+version: 13 # version, must be an integer
 description: |- # set description
   Bingo Ringo
 
